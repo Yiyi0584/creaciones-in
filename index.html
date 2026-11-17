@@ -62,6 +62,148 @@ const preciosDemo = {
   'Stickers': 35,
   'Agendas': 200
 };
-  const root=document.getElementById('productos');products.forEach(p=>{const card=document.createElement('article');card.className='product';const visual=document.createElement('div');visual.className='visual';visual.textContent=p.emoji;const info=document.createElement('div');info.className='info';const title=document.createElement('h3');title.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const price=document.createElement('span');price.className='price';price.textContent='Precio: consultar';const a=document.createElement('a');a.className='btn';a.textContent='Cotizar por WhatsApp';a.href='https://wa.me/529612331232?text='+encodeURIComponent('Hola, Creaciones IN. Quisiera cotizar: '+p.name+'.');a.target='_blank';a.rel='noopener noreferrer';info.append(title,desc,price,a);card.append(visual,info);root.append(card)});document.getElementById('year').textContent=new Date().getFullYear();
+
+const root = document.getElementById('productos');
+const carrito = [];
+
+const formatoPrecio = n =>
+  n.toLocaleString('es-MX', {
+    style: 'currency',
+    currency: 'MXN'
+  });
+
+const panel = document.createElement('section');
+panel.id = 'carrito-demo';
+panel.style.cssText =
+  'background:#e9faf8;padding:30px 20px;text-align:center;border-radius:22px;margin:30px auto;max-width:800px';
+
+panel.innerHTML = `
+  <h2>🛒 Mi carrito</h2>
+  <p>Demostración: precios ficticios, sin pagos reales.</p>
+  <div id="lista-carrito"></div>
+  <h3 id="total-carrito">Total: $0.00 MXN</h3>
+  <button id="vaciar-carrito" class="btn" type="button">
+    Vaciar carrito
+  </button>
+`;
+
+root.insertAdjacentElement('afterend', panel);
+
+function actualizarCarrito() {
+  const lista = document.getElementById('lista-carrito');
+  lista.replaceChildren();
+
+  let total = 0;
+
+  if (carrito.length === 0) {
+    const mensaje = document.createElement('p');
+    mensaje.textContent = 'Tu carrito está vacío.';
+    lista.append(mensaje);
+  }
+
+  carrito.forEach((producto, indice) => {
+    total += producto.precio;
+
+    const fila = document.createElement('div');
+    fila.style.cssText =
+      'padding:12px;border-bottom:1px solid #b6ded9';
+
+    const nombre = document.createElement('span');
+    nombre.textContent =
+      producto.nombre + ' — ' + formatoPrecio(producto.precio);
+
+    const quitar = document.createElement('button');
+    quitar.type = 'button';
+    quitar.textContent = ' ✕ Quitar';
+    quitar.style.marginLeft = '12px';
+
+    quitar.addEventListener('click', () => {
+      carrito.splice(indice, 1);
+      actualizarCarrito();
+    });
+
+    fila.append(nombre, quitar);
+    lista.append(fila);
+  });
+
+  document.getElementById('total-carrito').textContent =
+    'Total ficticio: ' + formatoPrecio(total);
+}
+
+document.getElementById('vaciar-carrito')
+  .addEventListener('click', () => {
+    carrito.length = 0;
+    actualizarCarrito();
+  });
+
+products.forEach(p => {
+  const card = document.createElement('article');
+  card.className = 'product';
+
+  const visual = document.createElement('div');
+  visual.className = 'visual';
+  visual.textContent = p.emoji;
+
+  const info = document.createElement('div');
+  info.className = 'info';
+
+  const titulo = document.createElement('h3');
+  titulo.textContent = p.name;
+
+  const descripcion = document.createElement('p');
+  descripcion.textContent = p.description;
+
+  info.append(titulo, descripcion);
+
+  if (p.modalidad === 'ambas') {
+    const precio = preciosDemo[p.name];
+
+    const etiqueta = document.createElement('span');
+    etiqueta.className = 'price';
+    etiqueta.textContent =
+      'Precio de demostración: ' + formatoPrecio(precio);
+
+    const comprar = document.createElement('button');
+    comprar.className = 'btn';
+    comprar.type = 'button';
+    comprar.textContent = '🛒 Agregar al carrito';
+    comprar.style.cssText =
+      'width:100%;border:0;cursor:pointer;margin-bottom:10px';
+
+    comprar.addEventListener('click', () => {
+      carrito.push({
+        nombre: p.name,
+        precio: precio
+      });
+      actualizarCarrito();
+      document.getElementById('carrito-demo')
+        .scrollIntoView({behavior:'smooth'});
+    });
+
+    info.append(etiqueta, comprar);
+  }
+
+  const cotizar = document.createElement('a');
+  cotizar.className = 'btn';
+  cotizar.textContent = '💬 Cotizar por WhatsApp';
+
+  cotizar.href =
+    'https://wa.me/529612331232?text=' +
+    encodeURIComponent(
+      'Hola, Creaciones IN. Quisiera cotizar: ' + p.name
+    );
+
+  cotizar.target = '_blank';
+  cotizar.rel = 'noopener noreferrer';
+
+  info.append(cotizar);
+  card.append(visual, info);
+  root.append(card);
+});
+
+actualizarCarrito();
+
+document.getElementById('year').textContent =
+  new Date().getFullYear();
 </script>
 </body></html>
