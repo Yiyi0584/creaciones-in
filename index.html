@@ -55,7 +55,13 @@ const products = [
     modalidad: 'cotizacion'
   }
 ];
-
-const root=document.getElementById('productos');products.forEach(p=>{const card=document.createElement('article');card.className='product';const visual=document.createElement('div');visual.className='visual';visual.textContent=p.emoji;const info=document.createElement('div');info.className='info';const title=document.createElement('h3');title.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const price=document.createElement('span');price.className='price';price.textContent='Precio: consultar';const a=document.createElement('a');a.className='btn';a.textContent='Cotizar por WhatsApp';a.href='https://wa.me/529612331232?text='+encodeURIComponent('Hola, Creaciones IN. Quisiera cotizar: '+p.name+'.');a.target='_blank';a.rel='noopener noreferrer';info.append(title,desc,price,a);card.append(visual,info);root.append(card)});document.getElementById('year').textContent=new Date().getFullYear();
+const preciosDemo = {
+  'Playeras personalizadas': 180,
+  'Tazas personalizadas': 120,
+  'Impresiones 3D': 150,
+  'Stickers': 35,
+  'Agendas': 200
+};
+  const root=document.getElementById('productos');products.forEach(p=>{const card=document.createElement('article');card.className='product';const visual=document.createElement('div');visual.className='visual';visual.textContent=p.emoji;const info=document.createElement('div');info.className='info';const title=document.createElement('h3');title.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const price=document.createElement('span');price.className='price';price.textContent='Precio: consultar';const a=document.createElement('a');a.className='btn';a.textContent='Cotizar por WhatsApp';a.href='https://wa.me/529612331232?text='+encodeURIComponent('Hola, Creaciones IN. Quisiera cotizar: '+p.name+'.');a.target='_blank';a.rel='noopener noreferrer';info.append(title,desc,price,a);card.append(visual,info);root.append(card)});document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 </body></html>
