@@ -161,6 +161,14 @@ panel.innerHTML = `
       style="border:0;cursor:pointer">
       Vaciar carrito
     </button>
+    <a
+  id="enviar-pedido"
+  class="btn"
+  href="#carrito-demo"
+  style="margin:12px;cursor:pointer"
+>
+  💬 Enviar pedido por WhatsApp
+</a>
   </div>
 `;
 root.parentElement.append(panel);
@@ -169,7 +177,50 @@ document.getElementById('vaciar-carrito').onclick = () => {
   carrito.length = 0;
   mostrarCarrito();
 };
+document.getElementById('enviar-pedido')
+  .addEventListener('click', function(event) {
+    event.preventDefault();
 
+    if (carrito.length === 0) {
+      alert('Primero agrega productos al carrito.');
+      return;
+    }
+
+    const cantidades = {};
+
+    carrito.forEach(item => {
+      const nombre = typeof item === 'string'
+        ? item
+        : item.name;
+
+      cantidades[nombre] = (cantidades[nombre] || 0) + 1;
+    });
+
+    let mensaje = 'Hola, Creaciones IN. Quiero realizar este pedido:\n\n';
+    let total = 0;
+
+    Object.entries(cantidades).forEach(([nombre, cantidad]) => {
+      const precio = preciosDemo[nombre] || 0;
+      const subtotal = precio * cantidad;
+
+      total += subtotal;
+
+      mensaje += `• ${nombre} x${cantidad}: $${subtotal.toFixed(2)} MXN\n`;
+    });
+
+    mensaje += `\nTotal estimado: $${total.toFixed(2)} MXN`;
+    mensaje += '\n\nQuisiera confirmar disponibilidad, personalización y precio final.';
+    mensaje += '\n(Precios de demostración, no definitivos).';
+
+    const telefono = '529612331232';
+
+    window.open(
+      'https://wa.me/' + telefono +
+      '?text=' + encodeURIComponent(mensaje),
+      '_blank',
+      'noopener,noreferrer'
+    );
+  });
 mostrarCarrito();
 document.getElementById('year').textContent =
   new Date().getFullYear();
