@@ -16,7 +16,46 @@
 <section class="contact" id="contacto"><div class="wrap"><h2>¿Tienes una idea en mente?</h2><p>Escríbenos y cuéntanos qué te gustaría personalizar.<br>Atendemos tus consultas por WhatsApp.</p><a class="btn" href="https://wa.me/529612331232?text=Hola%2C%20Creaciones%20IN.%20Quisiera%20informaci%C3%B3n%20sobre%20sus%20productos." target="_blank" rel="noopener noreferrer">💬 Escribir por WhatsApp</a><p class="notice">Tuxtla Gutiérrez, Chiapas · México</p></div></section></main>
 <footer>© <span id="year"></span> Creaciones IN · Dale forma a tus ideas, nosotros las hacemos reales 💖</footer>
 <script>
-const products=[{name:'Playeras personalizadas',emoji:'👕',description:'Diseños únicos para regalos, eventos y ocasiones especiales.'},{name:'Tazas personalizadas',emoji:'☕',description:'Un detalle especial con nombres, frases o imágenes.'},{name:'Gorras personalizadas',emoji:'🧢',description:'Personaliza una gorra con tu estilo favorito.'},{name:'Agendas personalizadas',emoji:'📔',description:'Agendas con portadas hechas especialmente para ti.'},{name:'Impresiones 3D',emoji:'🧩',description:'Piezas y detalles creativos impresos en 3D.'},{name:'Otros regalos personalizados',emoji:'🎀',description:'Cuéntanos tu idea y revisamos cómo hacerla realidad.'}];
+
+const products = [
+  {
+    name: 'Playeras personalizadas',
+    emoji: '👕',
+    description: 'Playeras con diseños únicos para regalos, eventos y ocasiones especiales.',
+    modalidad: 'ambas'
+  },
+  {
+    name: 'Tazas personalizadas',
+    emoji: '☕',
+    description: 'Tazas personalizadas con nombres, frases o imágenes.',
+    modalidad: 'ambas'
+  },
+  {
+    name: 'Impresiones 3D',
+    emoji: '🧩',
+    description: 'Figuras, piezas y artículos creativos impresos en 3D.',
+    modalidad: 'ambas'
+  },
+  {
+    name: 'Stickers',
+    emoji: '🌸',
+    description: 'Stickers creativos para decorar y personalizar.',
+    modalidad: 'ambas'
+  },
+  {
+    name: 'Agendas',
+    emoji: '📔',
+    description: 'Agendas con diseños y portadas personalizadas.',
+    modalidad: 'ambas'
+  },
+  {
+    name: 'Invitaciones',
+    emoji: '💌',
+    description: 'Invitaciones personalizadas para fiestas y eventos.',
+    modalidad: 'cotizacion'
+  }
+];
+
 const root=document.getElementById('productos');products.forEach(p=>{const card=document.createElement('article');card.className='product';const visual=document.createElement('div');visual.className='visual';visual.textContent=p.emoji;const info=document.createElement('div');info.className='info';const title=document.createElement('h3');title.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const price=document.createElement('span');price.className='price';price.textContent='Precio: consultar';const a=document.createElement('a');a.className='btn';a.textContent='Cotizar por WhatsApp';a.href='https://wa.me/529612331232?text='+encodeURIComponent('Hola, Creaciones IN. Quisiera cotizar: '+p.name+'.');a.target='_blank';a.rel='noopener noreferrer';info.append(title,desc,price,a);card.append(visual,info);root.append(card)});document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 </body></html>
