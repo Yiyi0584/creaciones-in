@@ -66,75 +66,32 @@ const preciosDemo = {
 const root = document.getElementById('productos');
 const carrito = [];
 
-const formatoPrecio = n =>
-  n.toLocaleString('es-MX', {
-    style: 'currency',
-    currency: 'MXN'
-  });
-
-const panel = document.createElement('section');
-panel.id = 'carrito-demo';
-panel.style.cssText =
-  'background:#e9faf8;padding:30px 20px;text-align:center;border-radius:22px;margin:30px auto;max-width:800px';
-
-panel.innerHTML = `
-  <h2>🛒 Mi carrito</h2>
-  <p>Demostración: precios ficticios, sin pagos reales.</p>
-  <div id="lista-carrito"></div>
-  <h3 id="total-carrito">Total: $0.00 MXN</h3>
-  <button id="vaciar-carrito" class="btn" type="button">
-    Vaciar carrito
-  </button>
-`;
-
-root.insertAdjacentElement('afterend', panel);
-
-function actualizarCarrito() {
+function mostrarCarrito() {
   const lista = document.getElementById('lista-carrito');
-  lista.replaceChildren();
+  lista.innerHTML = '';
 
   let total = 0;
 
-  if (carrito.length === 0) {
-    const mensaje = document.createElement('p');
-    mensaje.textContent = 'Tu carrito está vacío.';
-    lista.append(mensaje);
-  }
+  carrito.forEach((p, i) => {
+    total += p.precio;
 
-  carrito.forEach((producto, indice) => {
-    total += producto.precio;
-
-    const fila = document.createElement('div');
-    fila.style.cssText =
-      'padding:12px;border-bottom:1px solid #b6ded9';
-
-    const nombre = document.createElement('span');
-    nombre.textContent =
-      producto.nombre + ' — ' + formatoPrecio(producto.precio);
+    const fila = document.createElement('p');
+    fila.textContent = `${p.nombre} — $${p.precio} MXN `;
 
     const quitar = document.createElement('button');
-    quitar.type = 'button';
-    quitar.textContent = ' ✕ Quitar';
-    quitar.style.marginLeft = '12px';
+    quitar.textContent = 'Quitar';
+    quitar.onclick = () => {
+      carrito.splice(i, 1);
+      mostrarCarrito();
+    };
 
-    quitar.addEventListener('click', () => {
-      carrito.splice(indice, 1);
-      actualizarCarrito();
-    });
-
-    fila.append(nombre, quitar);
+    fila.append(quitar);
     lista.append(fila);
   });
 
   document.getElementById('total-carrito').textContent =
-    'Total ficticio: ' + formatoPrecio(total);
+    `Total ficticio: $${total} MXN`;
 }
-
-document.getElementById('vaciar-carrito')
-  .addEventListener('click', () => {
-    carrito.length = 0;
-    actualizarCarrito();
-  });
 
 products.forEach(p => {
   const card = document.createElement('article');
@@ -160,39 +117,30 @@ products.forEach(p => {
 
     const etiqueta = document.createElement('span');
     etiqueta.className = 'price';
-    etiqueta.textContent =
-      'Precio de demostración: ' + formatoPrecio(precio);
+    etiqueta.textContent = `Precio ficticio: $${precio} MXN`;
 
     const comprar = document.createElement('button');
     comprar.className = 'btn';
-    comprar.type = 'button';
     comprar.textContent = '🛒 Agregar al carrito';
     comprar.style.cssText =
       'width:100%;border:0;cursor:pointer;margin-bottom:10px';
 
-    comprar.addEventListener('click', () => {
-      carrito.push({
-        nombre: p.name,
-        precio: precio
-      });
-      actualizarCarrito();
+    comprar.onclick = () => {
+      carrito.push({ nombre: p.name, precio });
+      mostrarCarrito();
       document.getElementById('carrito-demo')
-        .scrollIntoView({behavior:'smooth'});
-    });
+        .scrollIntoView({ behavior: 'smooth' });
+    };
 
     info.append(etiqueta, comprar);
   }
 
   const cotizar = document.createElement('a');
   cotizar.className = 'btn';
-  cotizar.textContent = '💬 Cotizar por WhatsApp';
-
+  cotizar.textContent = 'Cotizar por WhatsApp';
   cotizar.href =
     'https://wa.me/529612331232?text=' +
-    encodeURIComponent(
-      'Hola, Creaciones IN. Quisiera cotizar: ' + p.name
-    );
-
+    encodeURIComponent('Hola, Creaciones IN. Quisiera cotizar: ' + p.name);
   cotizar.target = '_blank';
   cotizar.rel = 'noopener noreferrer';
 
@@ -201,8 +149,28 @@ products.forEach(p => {
   root.append(card);
 });
 
-actualizarCarrito();
+const panel = document.createElement('section');
+panel.id = 'carrito-demo';
+panel.innerHTML = `
+  <div class="wrap" style="text-align:center">
+    <h2>🛒 Mi carrito de demostración</h2>
+    <p>Precios ficticios. No se realizan pagos reales.</p>
+    <div id="lista-carrito"></div>
+    <h3 id="total-carrito">Total ficticio: $0 MXN</h3>
+    <button id="vaciar-carrito" class="btn"
+      style="border:0;cursor:pointer">
+      Vaciar carrito
+    </button>
+  </div>
+`;
+root.parentElement.append(panel);
 
+document.getElementById('vaciar-carrito').onclick = () => {
+  carrito.length = 0;
+  mostrarCarrito();
+};
+
+mostrarCarrito();
 document.getElementById('year').textContent =
   new Date().getFullYear();
 </script>
